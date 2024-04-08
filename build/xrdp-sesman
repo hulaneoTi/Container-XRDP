@@ -1,0 +1,12 @@
+#%PAM-1.0
+auth sufficient pam_kc.so
+account sufficient pam_kc.so
+#session sufficient pam_kc.so
+session required pam_mkhomedir.so
+
+auth required pam_env.so readenv=1
+auth required pam_env.so readenv=1 envfile=/etc/default/locale
+@include common-auth
+@include common-account
+@include common-session
+@include common-password

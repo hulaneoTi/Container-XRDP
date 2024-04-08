@@ -1,0 +1,47 @@
+#!/bin/bash
+
+$anterior
+
+start_xrdp_services() {
+    rm -rf /var/run/xrdp-sesman.pid
+    rm -rf /var/run/xrdp.pid
+    rm -rf /var/run/xrdp/xrdp-sesman.pid
+    rm -rf /var/run/xrdp/xrdp.pid
+	rm -rf /var/run/sssd.pid
+	service dbus restart
+	service xrdp restart
+}
+
+stop_xrdp_services() {
+    pkill xrdp
+	pkill dbus
+}
+
+verificar_servicos() {
+    for usuario in $anterior; do
+        pgrep -fu $usuario > /dev/null 2>&1 && return 1
+    done
+    return 0
+}
+
+pegaToken() {
+	export kcToken=$(curl -sk --location --request POST "https://$FQDN/auth/realms/master/protocol/openid-connect/token" --header 'Content-Type: application/x-www-form-urlencoded' --data-urlencode "username=$auth_admin_user" --data-urlencode "password=$auth_admin_pass" --data-urlencode 'grant_type=password' --data-urlencode 'client_id=admin-cli' | jq -r '.access_token')
+}
+
+pegaToken
+
+while :; do
+	
+	atual=$(curl -skX GET "https://$FQDN/auth/admin/realms/master/users" -H "Authorization: Bearer $kcToken" | jq -r .[].username)
+
+	[ $? -ne 0 ] && { pegaToken; atual=$(curl -skX GET "https://$FQDN/auth/admin/realms/master/users" -H "Authorization: Bearer $kcToken" | jq -r .[].username); }
+	
+	[ -n "$(comm -13 <(echo "$anterior" | tr ' ' '\n' | sort) <(echo "$atual" | tr ' ' '\n' | sort))" ] && (
+	while :; do
+		verificar_servicos "$anterior"
+    [ $? -eq 0 ] && { stop_xrdp_services && start_xrdp_services; break; } || sleep 1
+	done;
+	)
+	anterior="$atual"
+	sleep 2
+done

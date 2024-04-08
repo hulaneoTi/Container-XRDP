@@ -1,0 +1,12 @@
+{
+	"policies": {
+		"ExtensionSettings": {
+			"{446900e4-71c2-419f-a6a7-df9c091e268b}": {
+				"installation_mode": "force_installed",
+				"install_url": "file:///opt/firefox/distribution/bitwarden_password_manager-2023.7.1.xpi"
+			}
+		},
+		"AppAutoUpdate": false,
+    "DisableAppUpdate": true
+	}
+}
