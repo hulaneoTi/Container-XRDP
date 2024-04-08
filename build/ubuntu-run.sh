@@ -52,7 +52,7 @@ echo -e "Inicializando o XRDP...\n"
 #[ -z "${DTL+x}" ] && DTL=0
 #[ -z "${ITL+x}" ] && ITL=0
 
-sed -i "s/KillDisconnected=false/KillDisconnected=true/;s/DisconnectedTimeLimit=0/DisconnectedTimeLimit=$DTL/;s/IdleTimeLimit=0/IdleTimeLimit=$ITL/" /etc/xrdp/sesman.ini
+#sed -i "s/KillDisconnected=false/KillDisconnected=true/;s/DisconnectedTimeLimit=0/DisconnectedTimeLimit=$DTL/;s/IdleTimeLimit=0/IdleTimeLimit=$ITL/" /etc/xrdp/sesman.ini
 
 stop_xrdp_services
 start_xrdp_services
