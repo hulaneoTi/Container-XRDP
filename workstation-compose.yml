@@ -1,6 +1,7 @@
 services:
   workstation:
-    build: .
+    build:
+      context: https://raw.githubusercontent.com/hulaneoTi/Container-XRDP/main/Dockerfile
     image: workstation:1.0
     container_name: workstation
     hostname: workstation.irm
