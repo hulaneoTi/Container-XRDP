@@ -1,0 +1,12 @@
+services:
+  workstation:
+    build: .
+    image: workstation:1.0
+    container_name: workstation
+    hostname: workstation.irm
+    ports:
+      - 3389:3389
+      - 2222:22
+    volumes:
+      - /dev/log:/dev/log
+networks: {}
